@@ -1,0 +1,106 @@
+:root {
+    --primary: #4CAF50;
+    --background: #fffdf0;
+    --text: #000000;
+}
+
+body.dark-mode {
+    --primary: #ffffff;
+    --background: #1a1a1a;
+    --text: #ffffff;
+}
+
+#DarkLightMode {
+    position: absolute;
+    display: block;
+    background-image: url("./soleil.png");
+    animation: rotate 5s linear infinite;
+    background-size: 100px;
+    background-repeat: no-repeat;
+    z-index: 10;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+}
+
+@keyframes rotate {
+	0% {
+		transform: rotate(0deg);
+  }
+  50% {
+		transform: rotate(-180deg);
+	}
+	100% {
+		transform: rotate(-360deg);
+	}
+}
+@keyframes rotateMaissssALenvers {
+	0% {
+		transform: rotate(0deg);
+  }
+  50% {
+		transform: rotate(180deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+#DarkLightMode.dark-mode {
+    background-image: url("./lune.png");
+    filter: invert(1);
+}
+
+#DarkLightMode:hover {
+    transform: scale(1.1);
+}
+
+#DarkLightMode:active {
+    transform: scale(0.9);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text);
+  font-family: Museosans, sans-serif;
+  margin: 0;
+  padding: 0;
+  animation: rotate 8s linear infinite;
+  overflow: hidden;
+}
+
+header {
+    display: flex;
+    justify-content: center; 
+    align-items: center;           
+}
+
+.imageCtn {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+img {
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    margin: 10px;
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
+    border-width: 2px;
+    border-style: solid;
+    animation: rotateMaissssALenvers 5s linear infinite;
+    transition: all 0.5s ease;
+}
+
+.loader{
+    text-align:center;
+    padding:20px; 
+    display:none;
+}
+
+.imageCtn img:hover {
+    transform: scale(1.12);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}

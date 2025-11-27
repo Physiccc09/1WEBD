@@ -238,4 +238,84 @@ console.log("Surface du cercle :", Math.floor(c.getSurface()));
 const s = new Square(78524);
 console.log("Surface du carré :", Math.floor(s.getSurface()));
 */
+// Bouton pour changer le mode clair/sombre
 
+const dark = document.getElementById("DarkLightMode");
+
+dark.addEventListener("click", function() {
+    document.body.classList.toggle("dark-mode");
+    dark.classList.toggle("dark-mode");
+});const images = [
+    'https://opallotus.com/wp-content/uploads/2025/06/beautiful-photo-sea-waves-684x1024.jpg',
+    'https://static.wixstatic.com/media/8431f6_7144202aba4c47e6aaf1074db31c8c23~mv2.webp',
+    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
+    'https://images.unsplash.com/photo-1501785888041-af3ef285b470',
+    'https://images.unsplash.com/photo-1529156069898-49953e39b3ac',
+    'https://images.unsplash.com/photo-1547658719-da2b51169607',
+    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee',
+    'https://images.unsplash.com/photo-1465101046530-73398c7f28ca',
+    'https://images.unsplash.com/photo-1483721310020-03333e577078',
+    'https://images.unsplash.com/photo-1504711434969-e33886168f5c'
+];
+
+const galerie = document.querySelector('.imageCtn');
+const loader = document.querySelector('.loader');
+
+let index = 0;
+let draggedElement = null;
+
+function dragdrop(img) {
+    img.setAttribute("draggable", "true"); 
+
+    img.addEventListener('dragstart', () => {
+        draggedElement = img;
+    });
+
+    img.addEventListener('dragover', (e) => e.preventDefault());
+
+    img.addEventListener('drop', (e) => {
+        e.preventDefault();
+        if (draggedElement && draggedElement !== img) { 
+            galerie.insertBefore(draggedElement, img);
+        }
+    });
+}
+
+function chargerImages(n) {
+    galerie.appendChild(loader);
+    loader.style.display = 'block';
+    setTimeout(() => {
+        for (let i = 0; i < n; i++) {
+            const img = document.createElement('img');
+            img.src = images[index];
+            dragdrop(img);
+            galerie.appendChild(img);
+            index++;
+            if (index >= images.length) index = 0;
+        }
+        loader.style.display = 'none';
+    }, 200);
+}
+
+setTimeout(() => chargerImages(24), 900); 
+
+window.addEventListener('scroll', () => {
+    const position = window.innerHeight + window.scrollY;
+    const limite = document.body.offsetHeight;
+
+    if (position >= limite) {
+        setTimeout(() => chargerImages(12), 900);
+    }
+});
+
+const img = document.querySelector('#DarkLightMode');
+
+function moveRandomly() {
+    const randomX = Math.floor(Math.random() * (window.innerWidth - 40));
+    const randomY = Math.floor(Math.random() * (window.innerHeight - 40));
+    img.style.left = `${randomX}px`;
+    img.style.top = `${randomY}px`;
+    setTimeout(moveRandomly, 1500);
+}
+
+moveRandomly();
