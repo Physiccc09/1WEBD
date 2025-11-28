@@ -238,84 +238,144 @@ console.log("Surface du cercle :", Math.floor(c.getSurface()));
 const s = new Square(78524);
 console.log("Surface du carré :", Math.floor(s.getSurface()));
 */
-// Bouton pour changer le mode clair/sombre
 
 const dark = document.getElementById("DarkLightMode");
 
-dark.addEventListener("click", function() {
-    document.body.classList.toggle("dark-mode");
-    dark.classList.toggle("dark-mode");
-});const images = [
-    'https://opallotus.com/wp-content/uploads/2025/06/beautiful-photo-sea-waves-684x1024.jpg',
-    'https://static.wixstatic.com/media/8431f6_7144202aba4c47e6aaf1074db31c8c23~mv2.webp',
-    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
-    'https://images.unsplash.com/photo-1501785888041-af3ef285b470',
-    'https://images.unsplash.com/photo-1529156069898-49953e39b3ac',
-    'https://images.unsplash.com/photo-1547658719-da2b51169607',
-    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee',
-    'https://images.unsplash.com/photo-1465101046530-73398c7f28ca',
-    'https://images.unsplash.com/photo-1483721310020-03333e577078',
-    'https://images.unsplash.com/photo-1504711434969-e33886168f5c'
-];
+dark.addEventListener("click", function () {
+  document.body.classList.toggle("dark-mode");
+  dark.classList.toggle("dark-mode");
+});
 
-const galerie = document.querySelector('.imageCtn');
-const loader = document.querySelector('.loader');
+const images = [];
+
+function getImg() {
+  let i = 1;
+  try {
+    while (i <= 100) {
+      const imgURL = `https://picsum.photos/id/${i}/200/300`;
+      images.push(imgURL);
+      i++;
+    }
+  } catch (error) {
+    console.error("Erreur lors de la récupération de l'image :", error);
+  }
+}
+
+getImg();
+
+const galerie = document.querySelector(".imageCtn");
+const loader = document.querySelector(".loader");
 
 let index = 0;
 let draggedElement = null;
 
 function dragdrop(img) {
-    img.setAttribute("draggable", "true"); 
+  img.setAttribute("draggable", "true");
 
-    img.addEventListener('dragstart', () => {
-        draggedElement = img;
-    });
+  img.addEventListener("dragstart", () => {
+    draggedElement = img;
+  });
 
-    img.addEventListener('dragover', (e) => e.preventDefault());
-
-    img.addEventListener('drop', (e) => {
-        e.preventDefault();
-        if (draggedElement && draggedElement !== img) { 
-            galerie.insertBefore(draggedElement, img);
-        }
-    });
+  img.addEventListener("dragover", (e) => e.preventDefault());
+  img.addEventListener("drop", (e) => {
+    e.preventDefault();
+    if (draggedElement && draggedElement !== img) {
+      galerie.insertBefore(draggedElement, img);
+    }
+  });
 }
 
 function chargerImages(n) {
+  if (galerie && loader) {
     galerie.appendChild(loader);
-    loader.style.display = 'block';
+    loader.style.display = "block";
     setTimeout(() => {
-        for (let i = 0; i < n; i++) {
-            const img = document.createElement('img');
-            img.src = images[index];
-            dragdrop(img);
-            galerie.appendChild(img);
-            index++;
-            if (index >= images.length) index = 0;
-        }
-        loader.style.display = 'none';
+      for (let i = 0; i < n; i++) {
+        const img = document.createElement("img");
+        img.src = images[index];
+        dragdrop(img);
+        galerie.appendChild(img);
+        index++;
+        if (index >= images.length) index = 0;
+      }
+      loader.style.display = "none";
     }, 200);
+  }
 }
 
-setTimeout(() => chargerImages(24), 900); 
+setTimeout(() => chargerImages(24), 900);
 
-window.addEventListener('scroll', () => {
-    const position = window.innerHeight + window.scrollY;
-    const limite = document.body.offsetHeight;
+window.addEventListener("scroll", () => {
+  const position = window.innerHeight + window.scrollY;
+  const limite = document.body.offsetHeight;
 
-    if (position >= limite) {
-        setTimeout(() => chargerImages(12), 900);
-    }
+  if (position >= limite) {
+    setTimeout(() => chargerImages(12), 900);
+  }
 });
 
-const img = document.querySelector('#DarkLightMode');
+const img = document.querySelector("#DarkLightMode");
 
 function moveRandomly() {
+  if (img) {
     const randomX = Math.floor(Math.random() * (window.innerWidth - 40));
     const randomY = Math.floor(Math.random() * (window.innerHeight - 40));
     img.style.left = `${randomX}px`;
     img.style.top = `${randomY}px`;
     setTimeout(moveRandomly, 1500);
+  }
 }
 
 moveRandomly();
+
+let errorCount = 0;
+function fetchSimulatedData() {
+  return new Promise((resolve, reject) => {
+    const delay = Math.random() * 3000 + 1000;
+    setTimeout(() => {
+      if (Math.random() > 0.2) {
+        resolve(["Donnée 1", "Donnée 2", "Donnée 3"]);
+      } else {
+        reject("Impossible de récupérer les données");
+      }
+    }, delay);
+  });
+}
+
+let nombreTest = 0;
+async function jsp() {
+  nombreTest++;
+  console.log("Test n°" + nombreTest);
+  try {
+    const data = await fetchSimulatedData();
+    if (Array.isArray(data)) {
+      let list = "<ul>";
+      for (let i = 0; i < data.length; i++) {
+        list += "<li>" + data[i] + "</li>";
+      }
+      list += "</ul>";
+      document.getElementById("result").innerHTML = list;
+    } else {
+      document.getElementById("result").innerHTML =
+        "<p>C'est une chaine de caractere STR</p>";
+    }
+    document.getElementById("errorCount").innerText =
+      "Nombre d'erreurs : " + errorCount;
+  } catch (error) {
+    errorCount++;
+    console.error(error);
+    if (Array.isArray(error)) {
+      document.getElementById("result").innerHTML =
+        "<ul>" +
+        error.map((item) => "<li>" + item + "</li>").join("") +
+        "</ul>";
+    } else {
+      document.getElementById("result").innerHTML =
+        "<p>Échec du chargement : " + error + "</p>";
+    }
+    document.getElementById("errorCount").innerText =
+      "Nombre d'erreurs : " + errorCount + " pour test n°" + nombreTest;
+  }
+}
+
+document.getElementById("loadBtn").addEventListener("click", jsp);
